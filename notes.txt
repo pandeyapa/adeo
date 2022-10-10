@@ -1,0 +1,47 @@
+-----------------------------------------------------------------------------------------------
+1. Problem 1 - Adding review does not work
+-----------------------------------------------------------------------------------------------
+
+Identification:
+Looked in app.js that the endpoint called is PUT on /api/events/
+In EventController this endpoint method 'updateEvent' didn't do anything.
+
+Solution:
+Plug the controller to the service such that the PUT Event is saved in the DB.
+
+Steps:
+1. Add a method save to the EventRepository:
+    Event save(Event event);
+2. Remove the readOnly flag from the Repository
+3. Add cascading to the OneToMany members in Band and to OneToMany bands in Event.
+4. Add a method save to the EventService, which calls save on the Repository
+5. Call this method save on the EventService from the updateEvent method of the EventController
+
+----------------------------------------------------------------------------------------------
+2. Problem 2 - Using the delete button works but elements comes back when i refresh the page 
+----------------------------------------------------------------------------------------------
+
+Identification:
+It worked on the UI as the deleted event was removed from the list. 
+                vm.events.splice(index, 1);
+It came back on refreshing the page as the deletion wasn't done on the DB.
+The deleteById was correctly called on the EventRepository, but the modification wan't commited to the DB as the repository was marked as 'readOnly = true'.
+
+Solution:
+1. Remove the readOnly flag from the Repository (already done in the previous problem)
+
+----------------------------------------------------------------------------------------------
+3. New Feature - Implement /search/{query}
+----------------------------------------------------------------------------------------------
+Requirements:
+1. The solution needs to be implemented in Java
+
+Solution:
+Use the String::contains method to match the Member name to the query String.
+Use Java Stream API to filter the Events with Members matching the query String.
+
+Bonus: Add a [count] at each event and band to display the number of child items.
+Solution:
+Concatenate the children count to the Event::title and Band::name
+
+PS: I changed the java.version in the POM to Java 8, as it was the JDK available on my PC that I used for this exercise. 
